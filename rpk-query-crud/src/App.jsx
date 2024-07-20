@@ -1,12 +1,8 @@
-import TaskForm from './components/TaskForm';
-import { TasksList } from './components/TasksList';
+import MyRoutes from './routes/MyRoutes.jsx';
 
 const App = () => {
     return (
-        <>
-            <TaskForm />
-            <TasksList />
-        </>
+        <MyRoutes/>
     );
 };
 

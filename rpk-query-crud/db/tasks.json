@@ -10,12 +10,6 @@
       "id": "57a3",
       "name": "cambia estado",
       "description": "lest",
-      "completed": false
-    },
-    {
-      "id": "bc4a",
-      "name": "cambia estado",
-      "description": "lest",
       "completed": true
     }
   ]
