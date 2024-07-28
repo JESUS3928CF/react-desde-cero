@@ -1,25 +1,59 @@
+
+import { useDispatch } from 'react-redux';
+
+import { Link as RouterLink } from 'react-router-dom';
+
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { Button, Link } from '@mui/material';
 import { Google } from '@mui/icons-material';
 
-import { Link as RouterLink } from 'react-router-dom';
 import AuthLayout from '../layout/AuthLayout';
+import { useForm } from '../../hooks/useForm';
+import { checkingAuthentication, startGoogleSingIn } from '../../store/auth/thunks';
 
 const LoginPage = () => {
+
+    const dispatch = useDispatch();
+
+    /*/// estado inicial de formulario, custom hook  */
+    const { email, password, onInputChange } = useForm({
+        email: 'jesus@google.com',
+        password: '123456'
+    });
+
+    /// Envió de credenciales por usuarios locales
+    const onSubmit = ( event ) => {
+        event.preventDefault();
+
+        console.log({ email, password })
+
+        /// 2. Usando el thunk de inicio por usuario normal
+        dispatch( checkingAuthentication() );
+    }
+
+    /// Inicio por google
+    const onGoogleSingIn = () => {
+        console.log('onGoogleSingIn');
+
+        dispatch(startGoogleSingIn());
+    }
+
     return (
-        /*/// Usando el layout el contenido es el Form  */
         <AuthLayout title='Login'>
-            <form action=''>
+            <form action='' onSubmit={onSubmit}> {/*//!  */}
                 <Grid container>
                     <Grid item xs={12} sx={{ mt: 2 }}>
                         <TextField
                             label='Correo'
                             type='email'
                             placeholder='correo@google.com'
-                            /* Todo el ancho posible  */
                             fullWidth
+                            /*/// Variables para el control */
+                            name='email'
+                            onChange={onInputChange}
+                            value={email}
                         />
                     </Grid>
                     <Grid item xs={12} sx={{ mt: 2 }}>
@@ -27,30 +61,29 @@ const LoginPage = () => {
                             label='Contraseña'
                             type='password'
                             placeholder='Contraseña'
-                            /* Todo el ancho posible  */
                             fullWidth
+                            name='password'
+                            onChange={onInputChange}
+                            value={password}
                         />
                     </Grid>
 
-                    {/*//- Agregando botones  */}
+                    {/*/// Agregando Acciones a los botones */}
                     <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
                         <Grid item xs={12} sm={6}>
-                            <Button variant='contained' fullWidth>
+                            <Button type='submit' variant='contained' fullWidth> {/*//!  */}
                                 Login
                             </Button>
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <Button variant='contained' fullWidth>
-                                {/*//- Agregando iconos  */}
+                            <Button variant='contained' fullWidth onClick={ onGoogleSingIn }> {/*//!  */}
                                 <Google />
                                 <Typography sx={{ ml: 1 }}>Google</Typography>
                             </Button>
                         </Grid>
                     </Grid>
 
-                    {/*/// Grid con dirección de ROW  */}
                     <Grid container direction='row' justifyContent='end'>
-                        {/*//- Ese link de de MUI y es solo estilo con el component usas tu sistema de rutas que estas usando  */}
                         <Link
                             component={RouterLink}
                             color='inherit'
