@@ -1,5 +1,5 @@
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -12,28 +12,31 @@ import { Google } from '@mui/icons-material';
 import AuthLayout from '../layout/AuthLayout';
 import { useForm } from '../../hooks/useForm';
 import { checkingAuthentication, startGoogleSingIn } from '../../store/auth/thunks';
+import { useMemo } from 'react';
 
 const LoginPage = () => {
 
+    /// 1.1 Seleccionar el estado
+    const { status } = useSelector( state => state.auth );
+
     const dispatch = useDispatch();
 
-    /*/// estado inicial de formulario, custom hook  */
     const { email, password, onInputChange } = useForm({
         email: 'jesus@google.com',
         password: '123456'
     });
 
-    /// Envió de credenciales por usuarios locales
+    /// 1.2 Asi lo memorizo si el status cambia se va a volver a obtener otro valor 
+    const isAuthenticating = useMemo(() => status === 'checking', [status]);
+
     const onSubmit = ( event ) => {
         event.preventDefault();
 
         console.log({ email, password })
 
-        /// 2. Usando el thunk de inicio por usuario normal
         dispatch( checkingAuthentication() );
     }
 
-    /// Inicio por google
     const onGoogleSingIn = () => {
         console.log('onGoogleSingIn');
 
@@ -42,7 +45,9 @@ const LoginPage = () => {
 
     return (
         <AuthLayout title='Login'>
-            <form action='' onSubmit={onSubmit}> {/*//!  */}
+            <form action='' onSubmit={onSubmit}>
+                {' '}
+                {/*//!  */}
                 <Grid container>
                     <Grid item xs={12} sx={{ mt: 2 }}>
                         <TextField
@@ -50,7 +55,6 @@ const LoginPage = () => {
                             type='email'
                             placeholder='correo@google.com'
                             fullWidth
-                            /*/// Variables para el control */
                             name='email'
                             onChange={onInputChange}
                             value={email}
@@ -68,15 +72,29 @@ const LoginPage = () => {
                         />
                     </Grid>
 
-                    {/*/// Agregando Acciones a los botones */}
                     <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
                         <Grid item xs={12} sm={6}>
-                            <Button type='submit' variant='contained' fullWidth> {/*//!  */}
+                            {/*/// 1.3 Usar el status para deshabilitar*/}
+                            <Button
+                                disabled={isAuthenticating}
+                                type='submit'
+                                variant='contained'
+                                fullWidth
+                            >
+                                {' '}
+                                {/*//!  */}
                                 Login
                             </Button>
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <Button variant='contained' fullWidth onClick={ onGoogleSingIn }> {/*//!  */}
+                            <Button
+                                disabled={isAuthenticating}
+                                variant='contained'
+                                fullWidth
+                                onClick={onGoogleSingIn}
+                            >
+                                {' '}
+                                {/*//!  */}
                                 <Google />
                                 <Typography sx={{ ml: 1 }}>Google</Typography>
                             </Button>
