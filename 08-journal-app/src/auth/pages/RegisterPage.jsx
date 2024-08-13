@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 //!
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Link as RouterLink } from 'react-router-dom';
 
-import { Button, Grid, Link, TextField, Typography } from '@mui/material';
+import { Alert, Button, Grid, Link, TextField, Typography } from '@mui/material';
 
 import AuthLayout from '../layout/AuthLayout';
 import { useForm } from '../../hooks/useForm';
@@ -33,7 +33,9 @@ export const RegisterPage = () => {
     
     const dispatch = useDispatch()
 
+    /// vamos a desestructurar estas dos cosa para los errores
     const { status, errorMessage } = useSelector( state => state.auth );
+    const isCheckingAuthentication = useMemo( () => status === 'checking', [status] );
 
     const [formSubmitted, setFormSubmitted] = useState();
 
@@ -107,8 +109,21 @@ export const RegisterPage = () => {
                     </Grid>
 
                     <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
+
+                            {/*/// 3 Mostrar mensaje de alerta y ocultar cono la propiedad none que también se puede usar en sl sx  */}
+                        <Grid item xs={12} display={ !!errorMessage ? '' : 'none'}>
+                            <Alert severity='error'>
+                                {errorMessage}
+                            </Alert>
+                        </Grid>
                         <Grid item xs={12}>
-                            <Button type='submit' variant='contained' fullWidth>
+                            {/*/// 2 deshabilitar el botón si el meno esta autenticando  */}
+                            <Button
+                                type='submit'
+                                variant='contained'
+                                fullWidth
+                                disabled={isCheckingAuthentication}
+                            >
                                 Crear Cuenta
                             </Button>
                         </Grid>
