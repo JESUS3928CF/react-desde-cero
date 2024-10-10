@@ -9,14 +9,14 @@ const CounterWithCustomHook = () => {
           <h1> Counter with Hook : {counter} </h1>
 
           <div className='container-rows'>
-            {/*/// Si la función recibe parámetro hay que úsala de esta forma en los eventos, para no enviarle el even como parámetro  */}
-              <button className='btn btn-primary' onClick={ () => increment(2) }>
+              {/*/// Si la función recibe parámetro hay que úsala de esta forma en los eventos, para no enviarle el even como parámetro  */}
+              <button className='btn btn-primary' onClick={() => increment(2)}>
                   +1
               </button>
-              <button className='btn btn-primary' onClick={ () => reset(2) }>
+              <button className='btn btn-primary' onClick={reset}>
                   Reset
               </button>
-              <button className='btn btn-primary' onClick={ decrement }>
+              <button className='btn btn-primary' onClick={() => decrement(2)}>
                   -1
               </button>
           </div>

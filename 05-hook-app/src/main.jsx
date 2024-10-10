@@ -3,10 +3,10 @@ import { createRoot } from 'react-dom/client'
 
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import CounterWithCustomHook from './01-useState/CounterWithCustomHook';
+import FormWithCustomHook from './02-useEffect/FormWithCustomHook';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <CounterWithCustomHook />
+    <FormWithCustomHook />
   </StrictMode>,
 )
